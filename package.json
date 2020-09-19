@@ -1,0 +1,35 @@
+{
+  "name": "legacyapp",
+  "version": "1.0.0",
+  "description": "node app ",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server",
+    "dev": "nodemon server",
+    "build": "npm run build",
+    "heroku-postbuild": "cd client && npm run build",
+    "postinstall": "cd client && npm run build"
+  },
+  "author": "legacy graphics",
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  },
+  "dependencies": {
+    "@sendgrid/mail": "^7.2.6",
+    "bcrypt": "^5.0.0",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.10.4",
+    "multer": "^1.4.2",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0"
+  },
+  "engines": {
+    "node": "13.12.0"
+  }
+}
