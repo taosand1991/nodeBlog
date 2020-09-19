@@ -6,8 +6,7 @@
   "scripts": {
     "start": "node server",
     "dev": "nodemon server",
-    "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build",
-    "postinstall": "cd client && npm run build"
+    "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   },
   "author": "legacy graphics",
   "license": "MIT",
