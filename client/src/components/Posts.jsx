@@ -82,7 +82,6 @@ class Posts extends Component {
     console.log(posts);
     return (
       <Fragment>
-        <ToastContainer />
         <CreateCategory
           category={category}
           loading={loading}
@@ -91,6 +90,7 @@ class Posts extends Component {
           handleChange={this.handleChange}
           handleModal={this.handleModal}
         />
+        <ToastContainer />
         {checkUser.userAuth && (
           <ul className="nav">
             <li className="nav-item">
