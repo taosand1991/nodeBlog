@@ -5,9 +5,9 @@ import CreateCategory from "./CreateCategory";
 import axios from "axios";
 import checkUser from "../utils/userAuth";
 import apiCalls from "../refactors/apiCalls";
-import { Flip, toast, ToastContainer } from "react-toastify";
 import authContext from "../utils/authContext";
 import getCategoryColor from "../refactors/CategoryGetter";
+import { Flip, toast, ToastContainer } from "react-toastify";
 import moment from "moment";
 
 class Posts extends Component {
@@ -27,15 +27,30 @@ class Posts extends Component {
     this.setState({ category: e.target.value });
   };
 
-  async componentDidMount() {
-    const { setPosts } = this.context;
-    try {
-      const { data: posts } = await axios.get(apiCalls.posts);
-      setPosts(posts);
-    } catch (e) {
-      console.log(e.response.data);
-    }
-  }
+  // async componentDidMount() {
+  //   const { setPosts } = this.context;
+  //   try {
+  //     const { data: posts } = await axios.get(apiCalls.posts);
+  //     setPosts(posts);
+  //   } catch (e) {
+  //     console.log(e.response.data);
+  //   }
+  //   // const createChannel = pusher.subscribe("create-post");
+  //   // const { posts } = this.context;
+  //   // createChannel.bind("create", ({ post }) => {
+  //   //   const morePost = [...posts];
+  //   //   console.log(morePost);
+  //   //   // this.setState({ ...this.state.posts, posts });
+  //   //   //   toast.success(
+  //   //   //     `${posts.author.name} just created a post with the title ${posts.title}`,
+  //   //   //     {
+  //   //   //       transition: Flip,
+  //   //   //       autoClose: false,
+  //   //   //       position: "top-center",
+  //   //   //     }
+  //   //   //   );
+  //   // });
+  // }
 
   handleSubmit = async (e) => {
     e.preventDefault();

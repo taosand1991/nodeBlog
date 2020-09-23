@@ -4,6 +4,7 @@ import Button from "../refactors/Button";
 import authContext from "../utils/authContext";
 import apiCalls from "../refactors/apiCalls";
 import checkUser from "../utils/userAuth";
+import pusher from "../utils/pusher";
 import axios from "axios";
 import { Slide, toast, ToastContainer } from "react-toastify";
 
@@ -21,6 +22,8 @@ class CreatePost extends Component {
       loading: false,
     };
   }
+
+  componentDidMount() {}
 
   handleChange = (e) => {
     const post_details = { ...this.state.post_details };
@@ -40,12 +43,14 @@ class CreatePost extends Component {
   handleSubmit = async (e) => {
     e.preventDefault();
     this.setState({ loading: true });
+    pusher.connection.bind("create");
     const { post_details, selectedCategory, image } = this.state;
     const form_data = new FormData();
     form_data.append("title", post_details.title);
     form_data.append("body", post_details.body);
     form_data.append("category", selectedCategory);
     form_data.append("picture", image, image.name);
+    form_data.append("socket_id", pusher.connection.socket_id);
     try {
       await axios.post(apiCalls.posts, form_data, {
         headers: {
@@ -62,7 +67,7 @@ class CreatePost extends Component {
         });
       }, 2000);
       setTimeout(() => {
-        window.location.href = "/news";
+        this.props.history.replace("/news");
       }, 4000);
     } catch (e) {
       this.setState({ loading: false });

@@ -16,6 +16,10 @@ import PostDetail from "./PostDetail";
 import PasswordChange from "./PasswordChange";
 import ResetPassword from "./ResetPassword";
 import CompleteReset from "./CompleteReset";
+import pusher from "../utils/pusher";
+import { toast, ToastContainer, Slide } from "react-toastify";
+
+import io from "socket.io-client";
 
 class MainContainer extends Component {
   constructor(props) {
@@ -25,10 +29,27 @@ class MainContainer extends Component {
       categories: [],
       search: "",
     };
+    this.socket = io("http://localhost:5000", { transports: ["polling"] });
   }
 
   async componentDidMount() {
     this.refreshToken();
+    this.getPostComponent();
+    const createChannel = pusher.subscribe("create-post");
+    createChannel.bind("create", async (post) => {
+      this.getPostComponent();
+      toast.success(
+        `${post.posts.author.username} just created a post with the title ${post.posts.title}`,
+        {
+          transition: Slide,
+          autoClose: false,
+          position: "bottom-center",
+        }
+      );
+    });
+  }
+
+  getPostComponent = async () => {
     try {
       const { data: posts } = await axios.get(apiCalls.posts);
       const { data: categories } = await axios.get(apiCalls.category);
@@ -37,6 +58,11 @@ class MainContainer extends Component {
     } catch (e) {
       console.log(e.response.data);
     }
+  };
+
+  componentWillUnmount() {
+    pusher.unsubscribe("create-post");
+    pusher.unbind_all();
   }
 
   setPosts = (posts) => {
@@ -47,7 +73,14 @@ class MainContainer extends Component {
     if (checkUser.userAuth) {
       const user = jwtDecode(checkUser.userAuth);
       this.setState({ user });
-      console.log(user);
+      const today = new Date(0);
+      const time = today.setUTCSeconds(user.exp);
+      const totalTime = time - new Date();
+      setTimeout(() => {
+        alert("Your session has expired... you will be logged out");
+        localStorage.clear();
+        window.location.href = "/";
+      }, totalTime);
     }
   };
 
@@ -60,6 +93,7 @@ class MainContainer extends Component {
   };
 
   render() {
+    const { location } = this.props;
     const { user, posts, categories, search } = this.state;
     const { refreshToken, setPosts, handleSearchChange, clearSearch } = this;
     const filterPosts =
@@ -69,6 +103,7 @@ class MainContainer extends Component {
       });
     return (
       <Fragment>
+        <ToastContainer />
         <authContext.Provider
           value={{
             user,
@@ -83,7 +118,7 @@ class MainContainer extends Component {
           }}
         >
           <NavBar />
-          <Switch>
+          <Switch location={location}>
             <Route path="/login" component={Login} />
             <Route
               path="/create"
