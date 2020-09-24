@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node server",
     "dev": "nodemon server",
-    "heroku-postbuild": "cd client && npm install && npm run build"
+    "heroku-postbuild": "cd client && npm install && npm run build",
+    "now-build": "cd client && npm install && npm run build"
   },
   "author": "legacy graphics",
   "license": "MIT",
